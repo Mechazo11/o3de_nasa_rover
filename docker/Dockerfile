@@ -33,8 +33,6 @@ ARG ROS_DISTRO=humble
 # Specify the docker image metadata
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.name="O3DE Nasa Rover Demo"
-LABEL org.label-schema.description="O3DE Curiosity rover demo image"
-LABEL org.label-schema.vendor="Release version coupled with ROS 2 Humble Full image"
 LABEL org.label-schema.version=${VERSION}
 
 # Define a key enviornment variables
@@ -84,19 +82,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     sudo tar unzip vim wget xz-utils
     # && rm -rf /var/lib/apt/lists/* #  TODO need to figure out how to use this correctly
 
+### Install Space ROS demos to cotrol the rover ###
+## TODO ##
+
 ### Install all dependencies for O3DE ###
 
 # Git clone RobotSim, NasaMarsRoverGem and MarsYardGem
-WORKDIR ${O3DE_DIR}/Projects
-RUN git clone --branch main https://github.com/Mechazo11/O3DE_CURIOSITY_ROVER_SIM.git
+# WORKDIR ${O3DE_DIR}/Projects
+# RUN git clone --branch main https://github.com/Mechazo11/O3DE_CURIOSITY_ROVER_SIM.git
 
-WORKDIR ${O3DE_DIR}/Gems
-RUN git clone --branch main https://github.com/Mechazo11/NasaCuriosityRoverGem.git
-RUN git clone --branch main https://github.com/Mechazo11/MarsYardGem.git
+# WORKDIR ${O3DE_DIR}/Gems
+# RUN git clone --branch main https://github.com/Mechazo11/NasaCuriosityRoverGem.git
+# RUN git clone --branch main https://github.com/Mechazo11/MarsYardGem.git
 
-# ## Symlink clang version to non-versioned clang and set cc to clang
-RUN sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100 \
-    && sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
+# # ## Symlink clang version to non-versioned clang and set cc to clang
+# RUN sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100 \
+#     && sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
 
 # # ####  Install Open 3D Engine   ####  
 
@@ -161,8 +162,7 @@ RUN sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/c
 # # /dev/dri/renderD128 gives access to hardware-accelerated rendering tool such as GPU
 # RUN sudo usermod -aG render $USERNAME
 
-### Install Space ROS demos to cotrol the rover ###
-## TODO ##
+
 
 # Setup the entrypoint
 COPY ./entrypoint.sh /
