@@ -82,26 +82,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     sudo tar unzip vim wget xz-utils
     # && rm -rf /var/lib/apt/lists/* #  TODO need to figure out how to use this correctly
 
-### Install Space ROS demos to cotrol the rover ###
-## TODO ##
-
 ### Install all dependencies for O3DE ###
 
-# Git clone RobotSim, NasaMarsRoverGem and MarsYardGem
-# WORKDIR ${O3DE_DIR}/Projects
-# RUN git clone --branch main https://github.com/Mechazo11/O3DE_CURIOSITY_ROVER_SIM.git
-
-# WORKDIR ${O3DE_DIR}/Gems
-# RUN git clone --branch main https://github.com/Mechazo11/NasaCuriosityRoverGem.git
-# RUN git clone --branch main https://github.com/Mechazo11/MarsYardGem.git
+# Git clone project and asset gems
+WORKDIR ${O3DE_DIR}/Projects
+RUN git clone --branch main https://github.com/Mechazo11/O3DE_CURIOSITY_ROVER_SIM.git
+WORKDIR ${O3DE_DIR}/Gems
+RUN git clone --branch main https://github.com/Mechazo11/NasaCuriosityRoverGem.git
+RUN git clone --branch main https://github.com/Mechazo11/MarsYardGem.git
 
 # # ## Symlink clang version to non-versioned clang and set cc to clang
-# RUN sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100 \
-#     && sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
+RUN sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100 \
+    && sudo DEBIAN_FRONTEND=noninteractive update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++ 100
 
 # # ####  Install Open 3D Engine   ####  
 
-# # # Pull latest commit from development and build o3de. Note this does't build the whole engine
+# ## Pull latest commit from development and build o3de. Note this does't build the whole engine
 # WORKDIR ${HOME_DIR}
 
 # # # Install o3de engine (automatically pulls last commit from "development" branch)
@@ -122,8 +118,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 # WORKDIR ${HOME_DIR}/o3de
 
-# # Register RobotSim with this engine
-# #RUN ${O3DE_ENGINE}/scripts/o3de.sh register --this-engine 
+# # # Register Project with tRobotSimhis source built engine
+# RUN ${O3DE_ENGINE}/scripts/o3de.sh register --this-engine 
 # RUN ./scripts/o3de.sh register --this-engine \
 #     && ./scripts/o3de.sh register --gem-path ${O3DE_EXTRAS}/Gems/ROS2 \
 #     && ./scripts/o3de.sh register --gem-path ${O3DE_EXTRAS}/Gems/RosRobotSample \
@@ -132,11 +128,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 #     && ./scripts/o3de.sh register --gem-path ${O3DE_DIR}/Gems/MarsYardGem \
 #     && ./scripts/o3de.sh register --gem-path ${HOME_DIR}/o3de/Gems/Terrain
 
-# # Register RobotSim project.
+# # # Register RobotSim project.
 # # Project must be registered at the very end after all dependent gems are registered
 # RUN ./scripts/o3de.sh register --project-path ${O3DE_DIR}/Projects/${PROJECT_NAME}
 
-# # # Move to project directory and run cmake and build project (Warning takes about 10-15 mins)
+# # # # Move to project directory and run cmake and build project (Warning takes about 10-15 mins)
 # WORKDIR ${HOME_DIR}
 
 # # Install more essential binaries gazebo-msgs from binary
@@ -162,7 +158,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # # /dev/dri/renderD128 gives access to hardware-accelerated rendering tool such as GPU
 # RUN sudo usermod -aG render $USERNAME
 
-
+### Install Space ROS demos to cotrol the rover ###
+## TODO ##
 
 # Setup the entrypoint
 COPY ./entrypoint.sh /

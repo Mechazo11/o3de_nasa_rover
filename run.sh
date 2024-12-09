@@ -5,7 +5,7 @@
 #   docker
 #   an X server
 
-IMG_NAME=openrobotics/o3de_curiosity_docker
+IMG_NAME=simulation/o3de_mars_rover
 
 # Replace `/` with `_` to comply with docker container naming
 # And append `_runtime`
@@ -25,4 +25,3 @@ docker run --rm -it --name $CONTAINER_NAME \
 -e NVIDIA_VISIBLE_DEVICES=all \
 -e NVIDIA_DRIVER_CAPABILITIES=all \
 -e DISPLAY -e TERM  -e QT_X11_NO_MITSHM=1 $IMG_NAME
-
